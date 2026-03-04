@@ -30,17 +30,21 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate()
     logger.info('✅ MySQL connected')
-
-    // Tự động sync model với DB khi development
-    // alter: true — cập nhật bảng nếu model thay đổi, không xóa data
+    logger.info(`📦 DB Host: ${process.env.DB_HOST}`)
+   
     if (process.env.NODE_ENV === 'development') {
       await sequelize.sync({ alter: true })
       logger.info('✅ Models synced')
     }
 
+
   } catch (error) {
-    logger.error('❌ MySQL connection failed:', error.message)
-    process.exit(1) // Dừng server nếu không kết nối được DB
+    logger.error(`❌ MySQL connection failed: ${error.message}`)
+    logger.error(`Host: ${process.env.DB_HOST}`)
+    logger.error(`Port: ${process.env.DB_PORT}`)
+    logger.error(`User: ${process.env.DB_USER}`)
+    logger.error(`DB: ${process.env.DB_NAME}`)
+    process.exit(1)
   }
 }
 

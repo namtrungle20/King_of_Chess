@@ -8,7 +8,7 @@ const verifyToken = async (req, res, next) => {
     if (!token) return res.status(401).json({ message: "Bạn cần đăng nhập để thực hiện hành động này!" });
 
     try {
-        const token = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
 
         const user = await db.User.findOne({
             where: { nguoi_dung_id: decoded.id }
